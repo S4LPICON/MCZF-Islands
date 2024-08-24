@@ -1,6 +1,7 @@
 package com.s4lpicon.mczfislands.islandsmanager;
 
 import com.s4lpicon.mczfislands.objets.Island;
+import com.s4lpicon.mczfislands.utils.TPSpawn;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -9,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.s4lpicon.mczfislands.islandsmanager.IslandsManager.activateIsland;
@@ -23,7 +25,7 @@ public class IslandsPlayersManager {
         Player ownerIsland = Bukkit.getPlayer(islandOwnerName);
         //Verificar si el dueño de la isla se encuentra conectado
         if (ownerIsland == null){
-            player.sendMessage(Component.text("No puedes conectarte a esta isla, El dueño esta desconectado!"));
+            player.sendMessage(Component.text("El dueño de esta isla se encuentra desconectado!"));
             return;
         }
         String worldName = "PlayerIslands/"+ownerIsland.getUniqueId();
@@ -71,9 +73,17 @@ public class IslandsPlayersManager {
         Player playerBanned = Bukkit.getPlayer(playerToBan);
         if (playerBanned == null){
             whoBan.sendMessage("El jugador a banear no se encuentra conectado");
+            //si el jugador tiene permisos se los tengo que quitar aca
             return;
         }
-
+        if (playerBanned.getUniqueId().equals(whoBan.getUniqueId())){
+            whoBan.sendMessage("No puedes banearte tu mismo!");
+            return;
+        }
+        if (playerBanned.isOp()|| playerBanned.hasPermission("mczf.admin")){
+            whoBan.sendMessage("No puedes banear a un administrador!");
+            return;
+        }
         if (!activeIslands.containsKey(islandUuid)){
             activateIsland(islandUuid);
         }
@@ -87,6 +97,14 @@ public class IslandsPlayersManager {
             whoBan.sendMessage("El jugador ya esta baneado");
             return;
         }
+        // Obtén el mundo del jugador
+        World playerWorld = Objects.requireNonNull(playerBanned).getWorld();
+
+        // Compara el nombre del mundo con el nombre que estás buscando
+        if(playerWorld.getName().equals("PlayerIslands/" +whoBan.getUniqueId())){
+            TPSpawn.sendPlayerToWorld(Objects.requireNonNull(playerBanned), "main");
+            playerBanned.sendMessage("Te han baneado de esta isla!, enviandote al spawn!");
+        }
         island.banPlayer(playerBanned.getUniqueId());
         whoBan.sendMessage("Jugador baneado correctamente");
     }
@@ -95,6 +113,14 @@ public class IslandsPlayersManager {
         Player playerUnbanned = Bukkit.getPlayer(playerToUnban);
         if (playerUnbanned == null){
             whoUnban.sendMessage("El jugador a desbanear no se encuentra conectado");
+            return;
+        }
+        if (playerUnbanned.getUniqueId().equals(whoUnban.getUniqueId())){
+            whoUnban.sendMessage("No puedes banearte tu mismo!");
+            return;
+        }
+        if (playerUnbanned.isOp()|| playerUnbanned.hasPermission("mczf.admin")){
+            whoUnban.sendMessage("No puedes banear a un administrador!");
             return;
         }
         if (!activeIslands.containsKey(islandUuid)){
@@ -106,8 +132,8 @@ public class IslandsPlayersManager {
             return;
         }
 
-        if (island.isBannedPlayer(playerUnbanned.getUniqueId())){
-            whoUnban.sendMessage("El jugador ya esta baneado");
+        if (!island.isBannedPlayer(playerUnbanned.getUniqueId())){
+            whoUnban.sendMessage("El jugador aun no esta baneado esta baneado!");
             return;
         }
         island.unbanPlayer(playerUnbanned.getUniqueId());
