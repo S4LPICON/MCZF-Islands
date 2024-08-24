@@ -1,10 +1,9 @@
 package com.s4lpicon.mczfislands.commands;
 
 import com.s4lpicon.mczfislands.islandsmanager.IslandsManager;
+import com.s4lpicon.mczfislands.islandsmanager.IslandsPlayersManager;
+import com.s4lpicon.mczfislands.utils.DevInfo;
 import com.s4lpicon.mczfislands.utils.TPSpawn;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,15 +22,42 @@ public class CommandsManager implements CommandExecutor {
                         IslandsManager.createNewIsland(player);
                         break;
                     case "tp":
-                        TPSpawn.sendPlayerToWorld(player, "main");
+                        if (args.length == 2){
+                            IslandsPlayersManager.sendPlayerToIsland(player, args[1]);
+                        }else {
+                            IslandsPlayersManager.sendPlayerToIsland(player, player.getName());
+                        }
+                        break;
+                    case "ban":
+                        if (args.length == 2){
+                            IslandsPlayersManager.banPlayerFromIsland(player, args[1], player.getUniqueId());
+                        }else {
+                            player.sendMessage("Escribe el nombre del jugador a banear");
+                            return false;
+                        }
+                        break;
+                    case "unban":
+                        if (args.length == 2){
+                            IslandsPlayersManager.unbanPlayerFromIsland(player, args[1],player.getUniqueId());
+                        }else {
+                            player.sendMessage("Escribe el nombre del jugador a desbanear");
+                            return false;
+                        }
                         break;
                 }
 
 
                 return true;
             }
+        } else if (command.getName().equalsIgnoreCase("spawn")) {
+            if (sender instanceof Player player) {
+                TPSpawn.sendPlayerToWorld(player, "main");
+            }
+        }else if (command.getName().equalsIgnoreCase("devinfo")) {
+            if (sender instanceof Player player) {
+                DevInfo.devinfo(player);
+            }
         }
-
         return false;
     }
 }
