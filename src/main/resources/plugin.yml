@@ -1,0 +1,11 @@
+name: MCZF-Islands
+version: '${project.version}'
+main: com.s4lpicon.mczfislands.MCZF_Islands
+api-version: '1.21'
+prefix: MCZF
+authors: [S4LPICON]
+description: Plugin de islas para MCzofrenic Network
+
+commands:
+  island:
+    description: islands main command
