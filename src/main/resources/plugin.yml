@@ -13,3 +13,8 @@ commands:
     description: te lleva al spawn
   devinfo:
     description: info de desarrollo
+
+
+permissions:
+  mczf.admin:
+    description: permisos de administrador
