@@ -24,13 +24,13 @@ public class CommandsTabCompleter implements TabCompleter {
                     // Complete first level subcommands
                     completions.add("create");
                     completions.add("tp");
-                    completions.add("ban");
-                    completions.add("unban");
-                    completions.add("setspawn");
-                    completions.add("invite");
-                    completions.add("remove");
-                    completions.add("join");
-                    completions.add("leave");
+//                    completions.add("ban");
+//                    completions.add("unban");
+//                    completions.add("setspawn");
+//                    completions.add("invite");
+//                    completions.add("remove");
+//                    completions.add("join");
+//                    completions.add("leave");
                 } else if (args.length == 2 && args[0].equalsIgnoreCase("tp")
                         || args.length == 2 && args[0].equalsIgnoreCase("ban")
                         || args.length == 2 && args[0].equalsIgnoreCase("unban")
