@@ -24,8 +24,8 @@ public class CommandsTabCompleter implements TabCompleter {
                     // Complete first level subcommands
                     completions.add("create");
                     completions.add("tp");
-//                    completions.add("ban");
-//                    completions.add("unban");
+                    completions.add("ban");
+                    completions.add("unban");
 //                    completions.add("setspawn");
 //                    completions.add("invite");
 //                    completions.add("remove");
