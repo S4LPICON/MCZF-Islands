@@ -53,10 +53,12 @@ public class CommandsManager implements CommandExecutor {
             if (sender instanceof Player player) {
                 TPSpawn.sendPlayerToWorld(player, "main");
             }
+            return true;
         }else if (command.getName().equalsIgnoreCase("devinfo")) {
             if (sender instanceof Player player) {
                 DevInfo.devinfo(player);
             }
+            return true;
         }
         return false;
     }
