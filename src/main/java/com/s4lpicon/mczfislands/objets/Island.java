@@ -1,5 +1,6 @@
 package com.s4lpicon.mczfislands.objets;
 
+import com.google.gson.annotations.Expose;
 import com.s4lpicon.mczfislands.utils.Math;
 import org.bukkit.entity.Player;
 
@@ -9,13 +10,21 @@ import java.util.UUID;
 
 public class Island {
 
+    @Expose
     private String islandName;
+    @Expose
     private UUID ownerUuid;
+    @Expose
     private HashSet<UUID> residentsPlayers;
+    @Expose
     private HashSet<UUID> trustedPlayers;
+    @Expose
     private HashSet<UUID> bannedPlayers;
+    @Expose
     private final ArrayList<Double> spawnCoords; // X Y Z Yaw Pitch
+    @Expose
     private final String type;
+    @Expose
     private final int size;
 
 
@@ -40,6 +49,25 @@ public class Island {
         spawnCoords.add(0.0);
     }
 
+    public boolean banPlayer(UUID playerUuid){
+        if (!bannedPlayers.contains(playerUuid)) {
+            bannedPlayers.add(playerUuid);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unbanPlayer(UUID playerUuid){
+        if (bannedPlayers.contains(playerUuid)) {
+            bannedPlayers.remove(playerUuid);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isBannedPlayer(UUID playerUuid){
+        return bannedPlayers.contains(playerUuid);
+    }
 
     // Getters & setters
 
