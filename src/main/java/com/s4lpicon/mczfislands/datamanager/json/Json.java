@@ -38,7 +38,7 @@ public class Json {
     }
 
     public static Island loadIslandFromJson(UUID islandOwnerUuid) {
-        String rutaArchivo = "PlayerIslands/islandData/" + islandOwnerUuid;
+        String rutaArchivo = "PlayerIslands/islandData/" + islandOwnerUuid + ".json";
         try (FileReader reader = new FileReader(rutaArchivo)) {
             return gson.fromJson(reader, Island.class);
         } catch (IOException e) {
