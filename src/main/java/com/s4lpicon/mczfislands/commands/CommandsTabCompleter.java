@@ -26,7 +26,7 @@ public class CommandsTabCompleter implements TabCompleter {
                     completions.add("tp");
                     completions.add("ban");
                     completions.add("unban");
-//                    completions.add("setspawn");
+                    completions.add("setspawn");
 //                    completions.add("invite");
 //                    completions.add("remove");
 //                    completions.add("join");

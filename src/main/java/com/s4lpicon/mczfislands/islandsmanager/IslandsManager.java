@@ -3,6 +3,7 @@ package com.s4lpicon.mczfislands.islandsmanager;
 import com.s4lpicon.mczfislands.datamanager.json.Json;
 import com.s4lpicon.mczfislands.islandsgeneration.GenerationManager;
 import com.s4lpicon.mczfislands.objets.Island;
+import com.s4lpicon.mczfislands.utils.TPSpawn;
 import com.s4lpicon.mczfislands.utils.WorldsUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.s4lpicon.mczfislands.utils.WorldsUtils.loadWorld;
@@ -60,6 +62,24 @@ public class IslandsManager {
         WorldsUtils.unloadWorld(uuid, true);
         activeIslands.remove(uuid);
         Bukkit.getLogger().info("Se desactivo la isla con uuid"+uuid);
+    }
+
+    public static void islandSetSpawn(Player player){
+        // Obtén el mundo del jugador
+        World playerWorld = Objects.requireNonNull(player).getWorld();
+
+        // Compara el nombre del mundo con el nombre que estás buscando
+        if(!playerWorld.getName().equals("PlayerIslands/" +player.getUniqueId())){
+            player.sendMessage("Debes estar en tu propia isla para ejecutar este comando!");
+            return;
+        }
+        Island island = activeIslands.get(player.getUniqueId());
+        if (island == null){
+            player.sendMessage("Error con tu isla: ES NULA?"); //esta en su propia isla es imposible
+            return;
+        }
+        island.setSpawn(player.getLocation());
+        player.sendMessage("Se ha establecido correctamente el spawn de tu isla!");
     }
 
 

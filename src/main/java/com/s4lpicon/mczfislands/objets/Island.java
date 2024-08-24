@@ -2,6 +2,7 @@ package com.s4lpicon.mczfislands.objets;
 
 import com.google.gson.annotations.Expose;
 import com.s4lpicon.mczfislands.utils.Math;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -67,6 +68,26 @@ public class Island {
 
     public boolean isBannedPlayer(UUID playerUuid){
         return bannedPlayers.contains(playerUuid);
+    }
+
+    public void setSpawn(Location location){
+        // Extrae las coordenadas X, Y, Z
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+
+        // Extrae el yaw y el pitch
+        double yaw = location.getYaw();
+        double pitch = location.getPitch();
+
+        this.spawnCoords.clear();
+
+        spawnCoords.add(x);
+        spawnCoords.add(y);
+        spawnCoords.add(z);
+
+        spawnCoords.add(yaw);
+        spawnCoords.add(pitch);
     }
 
     // Getters & setters
