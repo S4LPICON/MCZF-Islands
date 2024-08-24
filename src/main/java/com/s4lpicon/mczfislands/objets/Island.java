@@ -142,4 +142,18 @@ public class Island {
     }
     //faltaria agregar getters y setters de el yaw y pitch
 
+
+    @Override
+    public String toString() {
+        return "Island{" +
+                "islandName='" + islandName + '\'' +
+                ", ownerUuid=" + ownerUuid +
+                ", residentsPlayers=" + residentsPlayers +
+                ", trustedPlayers=" + trustedPlayers +
+                ", bannedPlayers=" + bannedPlayers +
+                ", spawnCoords=" + spawnCoords +
+                ", type='" + type + '\'' +
+                ", size=" + size +
+                '}';
+    }
 }
