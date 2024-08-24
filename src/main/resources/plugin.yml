@@ -9,3 +9,7 @@ description: Plugin de islas para MCzofrenic Network
 commands:
   island:
     description: islands main command
+  spawn:
+    description: te lleva al spawn
+  devinfo:
+    description: info de desarrollo
