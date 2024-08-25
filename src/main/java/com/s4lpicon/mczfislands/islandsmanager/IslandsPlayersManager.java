@@ -43,7 +43,9 @@ public class IslandsPlayersManager {
             player.sendMessage("no se pudo hacer tp, la isla es nula");
             return;
         }
-        if (island.isBannedPlayer(player.getUniqueId())){
+        if (island.isBannedPlayer(player.getUniqueId())
+                && !player.isOp()
+                && !player.hasPermission("mczf.admin")){
             player.sendMessage("Estas baneado de esta isla!");
             return;
         }
@@ -51,8 +53,11 @@ public class IslandsPlayersManager {
         if (world != null) {
             // Crear una nueva ubicación en el mundo
             double x = island.getSpawnCoordX();
+            double y = island.getSpawnCoordY();
             double z = island.getSpawnCoordZ();
-            Location location = new Location(world, x, world.getHighestBlockYAt((int) x, (int) z)+1, z);
+            float yaw = (float) island.getSpawnYaw();   // Convertir yaw a float
+            float pitch = (float) island.getSpawnPitch(); // Convertir pitch a float
+            Location location = new Location(world, x, y, z, yaw, pitch);
 
             // Teletransportar al jugador
             player.teleport(location);
