@@ -50,24 +50,20 @@ public class Island {
         spawnCoords.add(0.0);
     }
 
-    public boolean banPlayer(UUID playerUuid){
-        if (!bannedPlayers.contains(playerUuid)) {
-            bannedPlayers.add(playerUuid);
-            return true;
-        }
-        return false;
+    public void banPlayer(UUID playerUuid){
+        bannedPlayers.add(playerUuid);
     }
 
-    public boolean unbanPlayer(UUID playerUuid){
-        if (bannedPlayers.contains(playerUuid)) {
-            bannedPlayers.remove(playerUuid);
-            return true;
-        }
-        return false;
+    public void unbanPlayer(UUID playerUuid){
+        bannedPlayers.remove(playerUuid);
     }
 
     public boolean isBannedPlayer(UUID playerUuid){
         return bannedPlayers.contains(playerUuid);
+    }
+
+    public boolean isPlayerMember(UUID playerUuid){
+        return residentsPlayers.contains(playerUuid) || trustedPlayers.contains(playerUuid);
     }
 
     public void setSpawn(Location location){
@@ -86,6 +82,25 @@ public class Island {
 
         this.setSpawnYaw(yaw);
         this.setSpawnPitch(pitch);
+    }
+
+    public void addMember(UUID player, int level){
+        switch (level){
+            case 1:
+                residentsPlayers.add(player);
+                break;
+            case 2:
+                trustedPlayers.add(player);
+                break;
+            default:
+        }
+    }
+
+    public void removeMember(UUID player){
+        if (residentsPlayers.contains(player)){
+            residentsPlayers.remove(player);
+
+        } else trustedPlayers.remove(player);
     }
 
     // Getters & setters
