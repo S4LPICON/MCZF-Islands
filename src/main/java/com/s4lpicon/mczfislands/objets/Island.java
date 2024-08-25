@@ -80,14 +80,12 @@ public class Island {
         double yaw = location.getYaw();
         double pitch = location.getPitch();
 
-        this.spawnCoords.clear();
+        this.setSpawnCoordsX(x);
+        this.setSpawnCoordsY(y);
+        this.setSpawnCoordsZ(z);
 
-        spawnCoords.add(x);
-        spawnCoords.add(y);
-        spawnCoords.add(z);
-
-        spawnCoords.add(yaw);
-        spawnCoords.add(pitch);
+        this.setSpawnYaw(yaw);
+        this.setSpawnPitch(pitch);
     }
 
     // Getters & setters
@@ -161,8 +159,20 @@ public class Island {
     public double getSpawnCoordZ(){
         return this.spawnCoords.get(2);
     }
-    //faltaria agregar getters y setters de el yaw y pitch
 
+    public double getSpawnYaw(){
+        return this.spawnCoords.get(3);
+    }
+    public double getSpawnPitch(){
+        return this.spawnCoords.get(4);
+    }
+
+    public void setSpawnYaw(double yaw){
+        this.spawnCoords.set(3, yaw);
+    }
+    public void setSpawnPitch(double pitch){
+        this.spawnCoords.set(4, pitch);
+    }
 
     @Override
     public String toString() {
