@@ -44,6 +44,9 @@ public class CommandsManager implements CommandExecutor {
                             return false;
                         }
                         break;
+                    case "setspawn":
+                        IslandsManager.islandSetSpawn(player);
+                        break;
                 }
 
 
