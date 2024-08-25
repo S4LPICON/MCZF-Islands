@@ -1,5 +1,6 @@
 package com.s4lpicon.mczfislands.commands;
 
+import com.s4lpicon.mczfislands.invitations.IslandsInvitationsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,9 +28,9 @@ public class CommandsTabCompleter implements TabCompleter {
                     completions.add("ban");
                     completions.add("unban");
                     completions.add("setspawn");
-//                    completions.add("invite");
+                    completions.add("invite");
 //                    completions.add("remove");
-//                    completions.add("join");
+                    completions.add("join");
 //                    completions.add("leave");
                 } else if (args.length == 2 && args[0].equalsIgnoreCase("tp")
                         || args.length == 2 && args[0].equalsIgnoreCase("ban")
@@ -44,16 +45,15 @@ public class CommandsTabCompleter implements TabCompleter {
                         }
                     }
                     return playerNames; // Retorna la lista de nombres de jugadores
+                } else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
+                    List<String> invitations = IslandsInvitationsManager.getInvitationsOfPlayer(player.getUniqueId());
+                    if (invitations.isEmpty()) {
+                        invitations.add("You no have invitations right now!");
+                        return invitations;
+                    } else {
+                        return invitations;
+                    }
                 }
-//                } else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
-//                    ArrayList<String> invitations = InvitationManager.getInvitationsOfPlayer(player);
-//                    if (invitations.isEmpty()) {
-//                        invitations.add("You no have invitations right now!");
-//                        return invitations;
-//                    } else {
-//                        return invitations;
-//                    }
-//                }
             }
 
         }
