@@ -138,12 +138,54 @@ public class IslandsPlayersManager {
         }
 
         if (!island.isBannedPlayer(playerUnbanned.getUniqueId())){
-            whoUnban.sendMessage("El jugador aun no esta baneado esta baneado!");
+            whoUnban.sendMessage("No has baneado a este jugador de tu isla!");
             return;
         }
         island.unbanPlayer(playerUnbanned.getUniqueId());
         whoUnban.sendMessage("Jugador desbaneado correctamente!");
     }
 
+    public static void addPlayerToIsland(Player owner , Player toAdd, int levelPermission){
+        if (!activeIslands.containsKey(owner.getUniqueId())){
+            owner.sendMessage("La isla no esta activa");
+            //IslandsManager.activateIsland(owner.getUniqueId());
+            return;
+        }
+        Island island = activeIslands.get(owner.getUniqueId());
+        if (island.isBannedPlayer(toAdd.getUniqueId())){
+            owner.sendMessage("Este jugador esta baneado de tu isla!");
+            return;
+        }
+        if (island.isPlayerMember(toAdd.getUniqueId())){
+            owner.sendMessage("Este jugador ya es miembro de tu isla!");
+            return;
+        }
+        island.addMember(toAdd.getUniqueId(), levelPermission);
+        owner.sendMessage("Se agrego correctamente a "+ toAdd.getName()+ " a tu isla!");
+    }
+
+    public static void removePlayerFromIsland(Player owner, String ptoRemove){
+        Player toRemove = Bukkit.getPlayer(ptoRemove);
+        if (toRemove == null){
+            // Debo poder eliminarlo incluso si no esta conectado
+            return;
+        }
+        if (!activeIslands.containsKey(owner.getUniqueId())){
+            //está desactivada debemos activarla
+            owner.sendMessage("La isla no esta activa (es nula)");
+            return;
+        }
+        Island island = activeIslands.get(owner.getUniqueId());
+        if (island.isBannedPlayer(toRemove.getUniqueId())){
+            owner.sendMessage("Este jugador esta baneado de tu isla!");
+            return;
+        }
+        if (!island.isPlayerMember(toRemove.getUniqueId())){
+            owner.sendMessage("Este jugador no es miembro de tu isla!");
+            return;
+        }
+        island.removeMember(toRemove.getUniqueId());
+        owner.sendMessage("Has eliminado correctamente a "+ toRemove.getName()+ " de tu isla!");
+    }
 
 }
