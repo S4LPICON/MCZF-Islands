@@ -1,5 +1,6 @@
 package com.s4lpicon.mczfislands.commands;
 
+import com.s4lpicon.mczfislands.invitations.IslandsInvitationsManager;
 import com.s4lpicon.mczfislands.islandsmanager.IslandsManager;
 import com.s4lpicon.mczfislands.islandsmanager.IslandsPlayersManager;
 import com.s4lpicon.mczfislands.utils.DevInfo;
@@ -9,6 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class CommandsManager implements CommandExecutor {
     @Override
@@ -46,6 +49,33 @@ public class CommandsManager implements CommandExecutor {
                         break;
                     case "setspawn":
                         IslandsManager.islandSetSpawn(player);
+                        break;
+                    case "invite":
+                        if (args.length >= 2) {
+                            if (args.length >= 3) {
+                                //IslandsManager.invitePlayerToIsland(args[1], player.getName(), Integer.parseInt(args[2]));
+                                IslandsInvitationsManager.sendInvitation(player, args[1],Integer.parseInt(args[2]));
+                            }else {
+                                player.sendMessage("Escribe el nivel de permisos para el jugador");
+                            }
+                        } else {
+                                player.sendMessage("Escribe el nombre del jugador que deseas invitar a tu isla!");
+                        }
+                        return true;
+                    case "join":
+                        if (args.length == 2){
+                            IslandsInvitationsManager.acceptInvitation(player, UUID.fromString(args[1]));
+                            return true;
+                        }else {
+                            player.sendMessage("Escribe el id de la invitación");
+                        }
+                        break;
+                    case "remove":
+                        if (args.length >= 2) {
+                            IslandsPlayersManager.removePlayerFromIsland(player, args[1]);
+                        } else {
+                            player.sendMessage("Escribe el nombre del jugador que deseas remover de tu isla!");
+                        }
                         break;
                 }
 
