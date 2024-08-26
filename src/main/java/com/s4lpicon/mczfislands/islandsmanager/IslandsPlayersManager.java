@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -49,12 +50,17 @@ public class IslandsPlayersManager {
             player.sendMessage("Estas baneado de esta isla!");
             return;
         }
-
         if (world != null) {
+            if (!island.isPlayerMember(player.getUniqueId()) && !island.getOwnerUuid().equals(player.getUniqueId())){
+                player.setGameMode(GameMode.ADVENTURE);
+            }
             // Crear una nueva ubicación en el mundo
             double x = island.getSpawnCoordX();
-            double y = island.getSpawnCoordY();
             double z = island.getSpawnCoordZ();
+            double y = island.getSpawnCoordY();
+            if (y == -1.0){ //la primera vez que entra al mundo
+                y = world.getHighestBlockYAt((int) x,(int) y)+1;
+            }
             float yaw = (float) island.getSpawnYaw();   // Convertir yaw a float
             float pitch = (float) island.getSpawnPitch(); // Convertir pitch a float
             Location location = new Location(world, x, y, z, yaw, pitch);
