@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -16,9 +17,7 @@ public class Island {
     @Expose
     private UUID ownerUuid;
     @Expose
-    private HashSet<UUID> residentsPlayers;
-    @Expose
-    private HashSet<UUID> trustedPlayers;
+    private final HashMap<UUID, Integer> members;
     @Expose
     private HashSet<UUID> bannedPlayers;
     @Expose
@@ -32,8 +31,7 @@ public class Island {
     public Island(String name, Player player, String type, int size){
         this.islandName = name;
         this.ownerUuid = player.getUniqueId();
-        this.residentsPlayers = new HashSet<>();
-        this.trustedPlayers = new HashSet<>();
+        this.members = new HashMap<>();
         this.bannedPlayers = new HashSet<>();
         this.spawnCoords = new ArrayList<>();
         randomSpawnCoords();
@@ -44,8 +42,9 @@ public class Island {
 
     private void randomSpawnCoords(){
         spawnCoords.add(Math.randomNumber(-255,255));
-        spawnCoords.add(0.0);
+        spawnCoords.add(-1.0);
         spawnCoords.add(Math.randomNumber(-255,255));
+
         spawnCoords.add(0.0);
         spawnCoords.add(0.0);
     }
@@ -63,9 +62,12 @@ public class Island {
     }
 
     public boolean isPlayerMember(UUID playerUuid){
-        return residentsPlayers.contains(playerUuid) || trustedPlayers.contains(playerUuid);
+        return members.containsKey(playerUuid);
     }
 
+    public int getLevelPermission(UUID player){
+        return this.members.get(player);
+    }
     public void setSpawn(Location location){
         // Extrae las coordenadas X, Y, Z
         double x = location.getX();
@@ -85,22 +87,11 @@ public class Island {
     }
 
     public void addMember(UUID player, int level){
-        switch (level){
-            case 1:
-                residentsPlayers.add(player);
-                break;
-            case 2:
-                trustedPlayers.add(player);
-                break;
-            default:
-        }
+        this.members.put(player,level);
     }
 
     public void removeMember(UUID player){
-        if (residentsPlayers.contains(player)){
-            residentsPlayers.remove(player);
-
-        } else trustedPlayers.remove(player);
+        this.members.remove(player);
     }
 
     // Getters & setters
@@ -121,20 +112,8 @@ public class Island {
         this.ownerUuid = ownerUuid;
     }
 
-    public HashSet<UUID> getResidentsPlayers() {
-        return residentsPlayers;
-    }
-
-    public void setResidentsPlayers(HashSet<UUID> residentsPlayers) {
-        this.residentsPlayers = residentsPlayers;
-    }
-
-    public HashSet<UUID> getTrustedPlayers() {
-        return trustedPlayers;
-    }
-
-    public void setTrustedPlayers(HashSet<UUID> trustedPlayers) {
-        this.trustedPlayers = trustedPlayers;
+    public HashMap<UUID,Integer> getMembers(){
+        return this.members;
     }
 
     public HashSet<UUID> getBannedPlayers() {
@@ -158,7 +137,7 @@ public class Island {
         this.spawnCoords.set(0,coordX);
     }
 
-    public void setSpawnCoordsY(double coordY){
+    public void setSpawnCoordsY(Double coordY){
         this.spawnCoords.set(1,coordY);
     }
     public void setSpawnCoordsZ(double coordZ){
@@ -191,15 +170,14 @@ public class Island {
 
     @Override
     public String toString() {
-        return "Island{" +
-                "islandName='" + islandName + '\'' +
-                ", ownerUuid=" + ownerUuid +
-                ", residentsPlayers=" + residentsPlayers +
-                ", trustedPlayers=" + trustedPlayers +
-                ", bannedPlayers=" + bannedPlayers +
-                ", spawnCoords=" + spawnCoords +
-                ", type='" + type + '\'' +
-                ", size=" + size +
+        return "Island{" + "\n" +
+                "Nombre: " + islandName + "\n" +
+                " Dueño UUID: " + ownerUuid + "\n" +
+                " Miembros: " + members + "\n" +
+                " Jugadores baneados: " + bannedPlayers + "\n" +
+                " Coords Spawn: " + spawnCoords + "\n" +
+                " Tipo: " + type + "\n" +
+                " Tamaño: " + size + "\n" +
                 '}';
     }
 }
