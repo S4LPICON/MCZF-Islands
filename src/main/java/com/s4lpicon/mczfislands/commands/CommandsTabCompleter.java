@@ -29,7 +29,7 @@ public class CommandsTabCompleter implements TabCompleter {
                     completions.add("unban");
                     completions.add("setspawn");
                     completions.add("invite");
-//                    completions.add("remove");
+                    completions.add("remove");
                     completions.add("join");
 //                    completions.add("leave");
                 } else if (args.length == 2 && args[0].equalsIgnoreCase("tp")
