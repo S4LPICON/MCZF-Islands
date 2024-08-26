@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.s4lpicon.mczfislands.objets.Island;
 
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,11 +17,25 @@ public class Json {
 
     public static void saveIslandOnJson(Island island) {
         if (island == null) {
-            // Maneja el caso donde jugadorIsla es null, tal vez con un mensaje de error o alguna otra lógica.
-            System.out.println("Error: jugadorIsla es null. No se puede guardar en JSON.");
+            // Maneja el caso donde island es null
+            System.out.println("Error: la isla es null. No se puede guardar en JSON.");
             return;
         }
-        String rutaArchivo = "PlayerIslands/islandData/" + island.getOwnerUuid() + ".json";
+
+        String rutaCarpeta = "PlayerIslands/islandData/";
+        String rutaArchivo = rutaCarpeta + island.getOwnerUuid() + ".json";
+
+        // Crear la carpeta si no existe
+        File carpeta = new File(rutaCarpeta);
+        if (!carpeta.exists()) {
+            if (carpeta.mkdirs()) {
+                System.out.println("Carpeta creada: " + rutaCarpeta);
+            } else {
+                System.err.println("Error al crear la carpeta: " + rutaCarpeta);
+                return;
+            }
+        }
+
         // Crear una instancia de Gson con configuración para incluir solo campos anotados con @Expose
         // y formatear el JSON de manera legible.
         Gson gson = new GsonBuilder()
