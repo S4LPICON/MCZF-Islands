@@ -6,37 +6,65 @@ import com.s4lpicon.mczfislands.utils.GenericUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class PermissionsManager {
 
-    public static boolean canDoThis(Player player, int levelRequired){
-        if(player.isOp() || player.hasPermission("mczf.admin")){
+    public static boolean canDoThis(Player player, int levelRequired) {
+//        // Chequeo si el jugador es un admin
+//        player.sendMessage("Entra a canDoThis");
+//        String worldName1 = player.getWorld().getName();
+//        player.sendMessage("Nombre del mundo: " + worldName1); // Mensaje de depuración
+//
+//        if (worldName1.equals("main")) {
+//            player.sendMessage("Estás en el mundo principal");
+//            // Agrega lógica de permisos especial si es necesario
+//        }
+        if (player.isOp() || player.hasPermission("mczf.admin")) {
+//            player.sendMessage("Puedes hacer esto, eres admin");
             return true;
         }
-        if (!player.getWorld().getName().startsWith("PlayersIslands/")){
+
+        // Verifica si el jugador está en un mundo de jugador
+        String worldName = player.getWorld().getName();
+        if (!worldName.startsWith("PlayerIslands/")) {
+//            player.sendMessage("No estás en una isla de jugador, mundo actual: " + worldName);
             return true;
         }
-        // el mundo y el nombre si son diferentes comprobamos permisos
-        // si no tiene permisos bloqueamos
 
-        String worldName = GenericUtils.getStringAfter(player.getWorld().getName(), "/");
-        String comparablePlayerName = String.valueOf(player.getUniqueId());
+        // Obtén el UUID del propietario del mundo
+        UUID ownerUuid = UUID.fromString(GenericUtils.getStringAfter(worldName, "/"));
+//        try {
+//            ownerUuid = UUID.fromString(GenericUtils.getStringAfter(worldName, "/"));
+//        } catch (IllegalArgumentException e) {
+//            player.sendMessage("UUID del propietario inválido, mundo actual: " + worldName);
+//            return false;
+//        }
 
-        UUID owner = Objects.requireNonNull(Bukkit.getPlayer(worldName)).getUniqueId();
-        Island island = IslandsManager.activeIslands.get(owner);
-        if (island == null){
-            player.sendMessage("No puedes estar en esta isla!");
-            // bastante raro que esté en una isla que no se considera activa
+        Player ownerPlayer = Bukkit.getPlayer(ownerUuid);
+        if (ownerPlayer == null) {
+            player.sendMessage("No puedes estar en esta isla, propietario no encontrado, UUID: " + ownerUuid);
             return false;
         }
 
-        if (worldName.equalsIgnoreCase(comparablePlayerName)){
+        Island island = IslandsManager.activeIslands.get(ownerPlayer.getUniqueId());
+        if (island == null) {
+            player.sendMessage("No puedes estar en esta isla, isla no encontrada.");
+            return false;
+        }
+
+        // Verifica si el jugador es el propietario de la isla
+        if (player.getUniqueId().equals(ownerPlayer.getUniqueId())) {
+//            player.sendMessage("Puedes hacer esto, eres el dueño de la isla.");
             return true;
         }
-        if (island.isPlayerMember(player.getUniqueId())){
 
+        // Verifica permisos en la isla
+        if (!island.isPlayerMember(player.getUniqueId())) {
+//            player.sendMessage("No eres miembro de la isla.");
+            return false;
         }
+
+        return island.getLevelPermission(player.getUniqueId()) >= levelRequired;
     }
 }
